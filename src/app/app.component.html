@@ -1,0 +1,52 @@
+<table border>
+  <thead>
+    <tr>
+      <th *ngFor="let header of getcustomReportHeaders()">{{ header }}</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let item of dataMessageResults">
+      <td *ngFor="let key of getcustomReportHeaders()">{{ item[key] }}</td>
+    </tr>
+  </tbody>
+</table>
+<div *ngIf="dataMessageResults.length > 10"><h1>Yes</h1></div>
+
+
+<h1> Table with multiple headers having column grouping</h1>
+<table class="customcolspantable">
+<thead>
+  <tr>
+    <ng-container *ngFor="let headername of responseheader">
+      <th [colSpan]="headername.colSpan" [rowSpan]="headername.rowSpan" class="firstrow">
+        {{ headername.displayName }}
+      </th>
+    </ng-container>
+  </tr>
+
+  <tr>
+    <ng-container *ngFor="let headername of responseheader">
+      <ng-container *ngFor="let subheaders of headername.subheaders">
+        <th>{{ subheaders.displayName }}</th>
+      </ng-container>
+    </ng-container>
+  </tr>
+</thead>
+<tbody>
+  <ng-container *ngFor="let maindata of responsedata">
+    <tr>
+      <td>
+        {{ maindata["Timestamp"] }}
+      </td>
+
+      <ng-container *ngFor="let headername of responseheader">
+        <ng-container *ngIf="headername.colSpan > 1">
+          <ng-container *ngFor="let subheaders of headername.subheaders">
+            <td>{{ maindata[headername.name][0][subheaders.name] }}</td>
+          </ng-container>
+        </ng-container>
+      </ng-container>
+    </tr>
+  </ng-container>
+</tbody>
+</table>
